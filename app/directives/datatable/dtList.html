@@ -1,0 +1,177 @@
+<style>
+    @supports (-ms-ime-align:auto) {
+        #hidediv1 {
+            display: none;
+        }
+
+        #hidediv2 {
+            display: none;
+        }
+
+        #hidediv3 {
+            display: none;
+        }
+    }
+
+
+    @media (min-width: 320px) {
+        .form-inline .form-control {
+            display: inline-block;
+            width: auto;
+            vertical-align: middle;
+        }
+    }
+
+    input.hideIt {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+
+
+    div#colVisBtn .dt-buttons a > span i{
+        padding-left: 5px;
+        vertical-align: middle;
+    }
+    div#colVisBtn .dt-buttons a.dt-button {
+        border: none;
+        background-color: transparent;
+        padding-top: 0px;
+    }
+    table.dataTable thead tr th {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+
+    table.dataTable tbody tr td {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+
+    th, td {
+        white-space: nowrap;
+    }
+
+
+    th input {
+        width: 100% !important;
+    }
+
+    /*.dataTables_scrollHead {
+    width:calc(100% - 20px) !important;
+    }*/
+
+    .dataTables_scrollHeadInner table thead tr {
+        height: 20px !important;
+        /* width: 100% !important;*/
+    }
+
+    div.dataTables_scrollBody table {
+        height: 20px !important;
+        width: 100% !important;
+    }
+
+    .DTFC_RightBodyLiner {
+        top:2px !important;
+    }
+
+    div.DTFC_LeftWrapper table.dataTable, div.DTFC_RightWrapper table.dataTable {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+
+    .DTFC_RightWrapper {
+        position: absolute;
+        top: 0px !important;
+        width: 107px;
+        height: auto !important;
+
+    }
+
+    .dataTables_scrollHeadInner table thead tr:nth-child(2n) {
+        padding: 0px !important;
+        margin: 0px !important;
+        height: 25px !important;
+        min-height: 25px !important;
+    }
+
+    .dataTables_scrollHeadInner table thead tr:nth-child(2n) th {
+        padding: 0px !important;
+        border-bottom: 0px !important;
+    }
+
+    .dataTables_scrollHeadInner table thead tr .form-control {
+        height: 23px !important;
+        min-height: 23px !important;
+        border: none !important;
+    }
+
+    table.dataTable thead > tr > th.sorting {
+        padding-right: 30px;
+        cursor: pointer;
+    }
+
+    table.dataTable thead > tr > th.sorting_desc {
+        padding-right: 30px;
+        cursor: pointer;
+    }
+
+    table.dataTable thead > tr > th.sorting_asc {
+        padding-right: 30px;
+        cursor: pointer;
+    }
+    .DTFC_RightHeadWrapper table thead tr .form-control {
+        height: 23px !important;
+        min-height: 23px !important;
+        border: none !important;
+        /*background-color: #f8f8f8;*/
+    }
+
+    div.DTFC_LeftWrapper table.dataTable.no-footer, div.DTFC_RightWrapper table.dataTable.no-footer {
+
+        margin-bottom:1px !important;
+    }
+
+
+    div.dataTables_scrollBody table.dataTable thead .sorting:after, div.dataTables_scrollBody table.dataTable thead .sorting_asc:after, div.dataTables_scrollBody table.dataTable thead .sorting_desc:after, div.dataTables_scrollBody table.dataTable thead .sorting_asc_disabled:after, div.dataTables_scrollBody table.dataTable thead .sorting_desc_disabled:after {
+        display: none;
+    }
+
+    /*div.DTFC_Blocker {
+        right:-9px !important;
+    }*/
+
+    table.dataTable tbody th,
+    table.dataTable tbody td {
+        white-space: nowrap;
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+    }
+
+    .dataTables_paginate{
+        display: none;
+    }
+
+    .table tbody tr {
+        height: 40px;
+    }
+
+
+</style>
+<!--style="postion: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);-->
+<div  id="{{mainDivId}}"></div>
+<div ng-if='noVisibility' id="noVisibilityHere" style="position:absolute;top:0em">
+    No column selected.
+</div>
+<div ng-show="showDTLoader" id="dtProcessignIndicator" class="itb-loader-dt">
+    <div>
+        <div class="loaderContainer">
+            <div class="loaderBG">
+                <span class="loaderCircle"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<table class="table table-striped row-border hover custom_tbl" cellspacing="0"><thead></thead><tfoot></tfoot></table>-->
+
