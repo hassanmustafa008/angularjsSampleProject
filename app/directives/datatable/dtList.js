@@ -1,7 +1,7 @@
 'use strict';
 angular.module('app')
-  .directive('dtList', ['$log', '$compile', '$state', '$timeout', 'sharedDatasvc', 'globalsvc', 'miscUtils', 'CONST','INTEGRATIONCONST',
-    function ($log, $compile, $state, $timeout, sharedDatasvc, globalsvc, miscUtils, CONST,INTEGRATIONCONST) {
+  .directive('dtList', ['$log', '$compile', '$timeout',
+    function ($log, $compile, $timeout) {
       return {
         restrict: 'EA',
         templateUrl: 'app/directives/js/DataTablesDirective/html/custome-table-view.html',
@@ -40,7 +40,7 @@ angular.module('app')
           addData: '&',
           bulkDelete: '&',
           changeList: '=',
-          showItbLoader:'&'
+          showItbLoader: '&'
         },
         controller: ['$scope', '$rootScope', '$filter', '$timeout', '$state', function ($scope, $rootScope, $filter, $timeout, $state) {
           $scope.showDTLoader = false;
@@ -116,50 +116,53 @@ angular.module('app')
             })();
             /*********************************function to configure DataTableObject to make it generic**********************************/
             var count = 0;
-            function checkPermission(object,operation){
-              if(!miscUtils.isUndefined(object.userPermission)){
-                if(object.userPermission.length>0){
+
+            function checkPermission(object, operation) {
+              if (!miscUtils.isUndefined(object.userPermission)) {
+                if (object.userPermission.length > 0) {
                   var userInfo = sharedDatasvc.getUser();
-                  var tempPermi=[];
-                  for(var up in object.userPermission){
+                  var tempPermi = [];
+                  for (var up in object.userPermission) {
                     if (userInfo.userGroups && userInfo.userGroups.length > 0) {
                       for (var j = 0; j < userInfo.userGroups.length; j++) {
                         if (object.userPermission[up].id == userInfo.userId || userInfo.userGroups[j].uuid == object.userPermission[up].id) {
-                          tempPermi=Array.from(new Set(tempPermi.concat(object.userPermission[up].permission)));
+                          tempPermi = Array.from(new Set(tempPermi.concat(object.userPermission[up].permission)));
                         }
                       }
-                    }else {
+                    } else {
                       if (object.userPermission[up].id == userInfo.userId) {
-                        tempPermi=Array.from(new Set(tempPermi.concat(object.userPermission[up].permission)));
+                        tempPermi = Array.from(new Set(tempPermi.concat(object.userPermission[up].permission)));
                       }
                     }
                   }
                   return tempPermi.indexOf(operation) > -1;
-                }else{
+                } else {
                   return "undefined";
                 }
-              }else{
+              } else {
                 return "undefined";
               }
             }
-            function permissionToApply(companyPermission,recordPermission,object){
-              if(companyPermission != true && companyPermission != false){     // because MiscUtils.isundefined(false) gives false
+
+            function permissionToApply(companyPermission, recordPermission, object) {
+              if (companyPermission != true && companyPermission != false) {     // because MiscUtils.isundefined(false) gives false
                 return false;
               }
-              if(sharedDatasvc.getUser().canAccessAll){
-                setBulkDelete(object,true);
+              if (sharedDatasvc.getUser().canAccessAll) {
+                setBulkDelete(object, true);
                 return true;
               }
-              if(recordPermission != "undefined"){
-                setBulkDelete(object,recordPermission);
+              if (recordPermission != "undefined") {
+                setBulkDelete(object, recordPermission);
                 return recordPermission;
-              }else{
-                setBulkDelete(object,companyPermission);
+              } else {
+                setBulkDelete(object, companyPermission);
                 return companyPermission;
               }
             }
-            function setBulkDelete(object,permission){
-              if(!miscUtils.isUndefined(object)){
+
+            function setBulkDelete(object, permission) {
+              if (!miscUtils.isUndefined(object)) {
                 object.bulkDelete = permission;
               }
             }
@@ -175,15 +178,16 @@ angular.module('app')
                     var actionButtonsHtml = "";
                     var user = sharedDatasvc.getUser();
                     /**** ---->>>>>>set edit to undefined instead of false to hide button.<<<<<<<<<-----------********/
-                    if (permissionToApply($scope.dtOptions.actionButtons.buttonsConfig.edit , checkPermission(object,"put")) && ($state.current.name !== 'app.domainTracker.list' && $state.current.name !== 'app.ssl.list')) {
+                    if (permissionToApply($scope.dtOptions.actionButtons.buttonsConfig.edit, checkPermission(object, "put")) && ($state.current.name !== 'app.domainTracker.list' && $state.current.name !== 'app.ssl.list')) {
                       actionButtonsHtml += '<button id="edit"' + row.row + '  data-placement="bottom" data-toggle="tooltip" data-original-title="Edit" ui-jq="tooltip" class="editBtnX btn btn-default btn-xs m-r-5"' + '> <img src="assets/img/icon_edit_s.svg" width="17px"> </button>';
                     }
                     if ($scope.dtOptions.actionButtons.buttonsConfig.location == true) {
                       actionButtonsHtml += '<button id="location"' + row.row + ' class="locationBtnX btn btn-default btn-xs"' + '> <i class="pe-7s-map-marker" style="font-size:20px" aria-hidden="true"></i> </button>';
-                    }/**** ---->>>>>>set delete to undefined instead of false to hide button.<<<<<<<<<-----------********/
-                    if (permissionToApply($scope.dtOptions.actionButtons.buttonsConfig.delete , checkPermission(object,"delete"), object)) {
+                    }
+                    /**** ---->>>>>>set delete to undefined instead of false to hide button.<<<<<<<<<-----------********/
+                    if (permissionToApply($scope.dtOptions.actionButtons.buttonsConfig.delete, checkPermission(object, "delete"), object)) {
                       if ($scope.dtOptions.actionButtons.buttonsConfig.csvExport) {
-                        if(object.status == 'In Queue') {
+                        if (object.status == 'In Queue') {
                           actionButtonsHtml += '<button id="delete"' + row.row + '  data-placement="bottom" data-toggle="tooltip" data-original-title="Delete" ui-jq="tooltip" class="deleteBtnX btn btn-default' + ' btn-xs m-r-5"> <img src="assets/img/icon_delete_s.svg" width="17px"> </button>';
                         }
                       }
@@ -197,7 +201,7 @@ angular.module('app')
                     if ($scope.dtOptions.actionButtons.buttonsConfig.cwBtn === true && object.id && (userType != CONST.USERTYPE.EXTERNAL && user.mainIntegration == INTEGRATIONCONST.AUTOTASK && userType != CONST.USERTYPE.EXTERNAL.toLowerCase())) {
                       actionButtonsHtml += '<button id="cwBtn"' + row.row + ' data-placement="bottom" data-toggle="tooltip" data-original-title="Autotask" ui-jq="tooltip" class="cwBtnX btn btn-default' + ' btn-xs"> <img src="../assets/img/sync_autotask.png" width="22px" class="v-align-top"> </button>';
                     }
-                    if ($scope.dtOptions.actionButtons.buttonsConfig.searchModal === true || (($state.current.name == 'app.domainTracker.list' || $state.current.name == 'app.ssl.list') && checkPermission(object,"put") == true)) {
+                    if ($scope.dtOptions.actionButtons.buttonsConfig.searchModal === true || (($state.current.name == 'app.domainTracker.list' || $state.current.name == 'app.ssl.list') && checkPermission(object, "put") == true)) {
                       actionButtonsHtml += '<button id="searchTagslist"' + row.row + '  data-placement="bottom" data-toggle="tooltip" data-original-title="Tags" ui-jq="tooltip" class="searchBtnX btn btn-default' + ' btn-xs m-r-5"> <img src="assets/img/icon_update_tags.svg" width="17" id="searchTagslist"> </button>';
                     }
                     if ($scope.dtOptions.actionButtons.buttonsConfig.updateFromList === true) {
@@ -207,9 +211,9 @@ angular.module('app')
                       actionButtonsHtml += '<button id="userInvite"' + row.row + ' data-placement="bottom" data-toggle="tooltip" data-original-title="Send Invite" ui-jq="tooltip" class="userInviteBtnX btn btn-default' + ' btn-xs m-r-5"><img src="assets/img/icon_sendinvite_s.svg" width="17px"> </button>';
                     }
                     if ($scope.dtOptions.actionButtons.buttonsConfig.toggleSyncing === true && object.psaName) {
-                      if(object.status.toLowerCase() === "paused") {
+                      if (object.status.toLowerCase() === "paused") {
                         actionButtonsHtml += '<button id="toggleSyncing"' + row.row + ' class="toggleSyncingBtnX btn btn-default' + ' btn-xs m-r-5 m-l-5" data-placement="bottom" data-toggle="tooltip" data-original-title="Play" ui-jq="tooltip"> <img src="assets/img/icon_startmanual.png" width="20" id="searchTagslist" >  </button>';
-                      }else {
+                      } else {
                         actionButtonsHtml += '<button id="toggleSyncing"' + row.row + ' class="toggleSyncingBtnX btn btn-default' + ' btn-xs m-r-5 m-l-5" data-placement="bottom" data-toggle="tooltip" data-original-title="Pause" ui-jq="tooltip" > <img src="assets/img/icon_syncpause.png" width="20" id="searchTagslist" > </button>';
                       }
                     }
@@ -222,7 +226,7 @@ angular.module('app')
                     if ($scope.dtOptions.actionButtons.buttonsConfig.print === true) {
                       actionButtonsHtml += '<button id="print"' + row.row + ' data-placement="bottom" data-toggle="tooltip" data-original-title="Invoice" ui-jq="tooltip" class="printBtnX btn btn-default' + ' btn-xs m-r-5"> <img src="../assets/img/icon_export_pdf.svg" width="17px"/> </button>';
                     }
-                    if ($scope.dtOptions.actionButtons.buttonsConfig.kbModal === true  && object.recordStatus != "Draft" ) {
+                    if ($scope.dtOptions.actionButtons.buttonsConfig.kbModal === true && object.recordStatus != "Draft") {
                       actionButtonsHtml += '<button id="delete"' + row.row + ' data-placement="bottom" data-toggle="tooltip" data-original-title="Copy list" ui-jq="tooltip" class="copyKbList btn btn-default' + ' btn-xs m-r-5"> <img src="assets/img/icon_duplicate.svg" width="17"> </button>';
                     }
                     if ($scope.dtOptions.actionButtons.buttonsConfig.refresh === true) {
@@ -234,24 +238,24 @@ angular.module('app')
                     if ($scope.dtOptions.actionButtons.buttonsConfig.kbExportPdf === true) {
                       actionButtonsHtml += '<button id=' + 'importPdf' + count + ' data-placement="bottom" data-toggle="tooltip" data-original-title="Export PDF" ui-jq="tooltip" class="kbExportPdfBtnX btn btn-default btn-xs m-r-5 hidden-xs"' + '> <img src="../assets/img/icon_export_pdf.svg" width="17px"/></button>';
                     }
-                    if($scope.dtOptions.actionButtons.buttonsConfig.resetDTExpiry === true || (($state.current.name == 'app.domainTracker.list' || $state.current.name == 'app.ssl.list') && checkPermission(object,"put") == true)){
+                    if ($scope.dtOptions.actionButtons.buttonsConfig.resetDTExpiry === true || (($state.current.name == 'app.domainTracker.list' || $state.current.name == 'app.ssl.list') && checkPermission(object, "put") == true)) {
                       actionButtonsHtml += '<button id="userInvite"' + row.row + '  data-placement="bottom" data-toggle="tooltip" data-original-title="Reset Expiry Date" ui-jq="tooltip" class="resetDTExpiryBtnX btn btn-default' + ' btn-xs m-r-5"> <img src="../assets/img/icon_adddateexpire.svg"  width="17"/></button>';
                     }
                     if ($scope.dtOptions.actionButtons.buttonsConfig.download === true) {
                       actionButtonsHtml += '<button id="download"' + row.row + ' data-placement="bottom" data-toggle="tooltip" data-original-title="Download" ui-jq="tooltip" class="downloadBtnX btn btn-default btn-xs' + ' btn-xs m-r-5"> <img src="../assets/img/icon_download_launcher.svg"  width="17"/></button>';
                     }
-                    if ($scope.dtOptions.actionButtons.buttonsConfig.cancelOnly === true && (object.status=='In Progress' || object.status=='In Queue') ) {
-                      actionButtonsHtml += '<button id='+'cancel' + row.row + ' class="cancelOnlyX btn btn-default btn-xs' + ' btn-xs m-r-5" data-placement="bottom" data-toggle="tooltip" data-original-title="Cancel" ui-jq="tooltip"> <img src="assets/img/icon_cross_r.svg" width="20"> </button>';
+                    if ($scope.dtOptions.actionButtons.buttonsConfig.cancelOnly === true && (object.status == 'In Progress' || object.status == 'In Queue')) {
+                      actionButtonsHtml += '<button id=' + 'cancel' + row.row + ' class="cancelOnlyX btn btn-default btn-xs' + ' btn-xs m-r-5" data-placement="bottom" data-toggle="tooltip" data-original-title="Cancel" ui-jq="tooltip"> <img src="assets/img/icon_cross_r.svg" width="20"> </button>';
                     }
-                    var users="";
-                    if ($scope.dtOptions.actionButtons.buttonsConfig.lock === true && object.userPermission && object.userPermission.length>0) {
-                      users=object.userPermission[0].fullName;
-                      for(var i=1;i<object.userPermission.length;i++){
-                        users+=", "+object.userPermission[i].fullName;
+                    var users = "";
+                    if ($scope.dtOptions.actionButtons.buttonsConfig.lock === true && object.userPermission && object.userPermission.length > 0) {
+                      users = object.userPermission[0].fullName;
+                      for (var i = 1; i < object.userPermission.length; i++) {
+                        users += ", " + object.userPermission[i].fullName;
                       }
-                      actionButtonsHtml += '<button  data-toggle="popover" data-placement="left" title="Users" data-content="'+users+'" id="lock"' + row.row + ' data-placement="bottom" data-toggle="tooltip" data-original-title="Locked" ui-jq="tooltip" class="lockBtnX btn btn-default' + ' btn-xs m-r-5 hidden-xs"> <img src="./../../../../../assets/img/icon_locked.png"  width="20px"/></button>';
+                      actionButtonsHtml += '<button  data-toggle="popover" data-placement="left" title="Users" data-content="' + users + '" id="lock"' + row.row + ' data-placement="bottom" data-toggle="tooltip" data-original-title="Locked" ui-jq="tooltip" class="lockBtnX btn btn-default' + ' btn-xs m-r-5 hidden-xs"> <img src="./../../../../../assets/img/icon_locked.png"  width="20px"/></button>';
                     }
-                    if ($scope.dtOptions.actionButtons.buttonsConfig.lock === true && (object.userPermission==undefined || (object.userPermission && object.userPermission.length==0))) {
+                    if ($scope.dtOptions.actionButtons.buttonsConfig.lock === true && (object.userPermission == undefined || (object.userPermission && object.userPermission.length == 0))) {
                       actionButtonsHtml += '<button id="unLock"' + row.row + ' data-placement="bottom" data-toggle="tooltip" data-original-title="Set Permissions" ui-jq="tooltip" class="unLockBtnX btn btn-default' + ' btn-xs m-r-5 hidden-xs"> <img src="./../../../../../assets/img/icon_unlocked.png"  width="20px"/></button>';
                     }
                     if ($scope.dtOptions.actionButtons.buttonsConfig.contactDashboard === true) {
@@ -394,20 +398,20 @@ angular.module('app')
               else if (className === 'copyKbList') {
                 $scope.kbObject(data, row);
               }
-              else if (className === 'refreshBtnX'  ) {
+              else if (className === 'refreshBtnX') {
                 var skipButton = true;
-                if(this.formAction.indexOf('ssl')>-1){
-                  var sslRefreshList =sharedDatasvc.getsslRefreshList();
-                  for (var item1 in sslRefreshList){
-                    if(sslRefreshList[item1].ITBSSLLabId == data.ITBSSLLabId){
+                if (this.formAction.indexOf('ssl') > -1) {
+                  var sslRefreshList = sharedDatasvc.getsslRefreshList();
+                  for (var item1 in sslRefreshList) {
+                    if (sslRefreshList[item1].ITBSSLLabId == data.ITBSSLLabId) {
                       skipButton = false;
                       break
                     }
                   }
-                }else{
+                } else {
                   skipButton = sharedDatasvc.getRefreshFlag();
                 }
-                if(skipButton) {
+                if (skipButton) {
                   $(this).find("img").addClass("fa-spin");
                   $scope.refreshRow(data, row);
                 }
@@ -418,9 +422,9 @@ angular.module('app')
               } else if (className === 'kbExportDocsBtnX' && sharedDatasvc.getExportKbDocsFlag()) {
                 $(this).replaceWith('<i class="pe-7s-refresh-2 m-l-5 fa-spin" style="font-size:18px;vertical-align:middle;" aria-hidden="true">');
                 $scope.kbExportDOCS(data, row);
-              } else if (className === 'downloadBtnX'){
+              } else if (className === 'downloadBtnX') {
                 $scope.downloadObject(data, row);
-              }else if( className === 'cancelOnlyX'){
+              } else if (className === 'cancelOnlyX') {
                 $scope.cancelObj(data, row);
               }
             };
@@ -566,7 +570,7 @@ angular.module('app')
                     //  $scope.scroll({data: data});
                   });
                 }
-                else if ($scope.mainTag === "tickListModalMainTags" || $scope.mainTag ==="ticketDetails") {
+                else if ($scope.mainTag === "tickListModalMainTags" || $scope.mainTag === "ticketDetails") {
                   $('#' + $scope.mainTag + ' .dataTables_scrollBody').scroll(function () {
                     var data = {};
                     data.scrollEnd = $('#' + $scope.mainTag + ' .dataTables_scrollBody')[0].scrollTop;
@@ -588,7 +592,7 @@ angular.module('app')
               $('#container').css('display', 'block');
               $scope.table.columns.adjust().draw();
               var elem = null;
-              $('[data-toggle="popover"]').popover({html:true}).on("mouseenter", function (e) {
+              $('[data-toggle="popover"]').popover({html: true}).on("mouseenter", function (e) {
                 //e.stopPropagation();
                 // $('popover').popover('destroy');
                 //   if(e.toElement.cellIndex === 1) {
@@ -597,16 +601,18 @@ angular.module('app')
                 elem = this;
                 $(this).popover("show");
                 $('.popover').css({
-                  "left": function(){
+                  "left": function () {
                     var pointerPosition = e.pageX;
-                    if(pointerPosition> (screen.width/2)){
-                      return pointerPosition-400; //(100 is basically the width of the tooltip + widht of the placeholder + 2 Px)
+                    if (pointerPosition > (screen.width / 2)) {
+                      return pointerPosition - 400; //(100 is basically the width of the tooltip + widht of the placeholder + 2 Px)
                     }
                     else {
                       return pointerPosition + 30;
                     }
                   },
-                  "top": function(){ return e.pageY - 65;}
+                  "top": function () {
+                    return e.pageY - 65;
+                  }
                 });
                 $scope.dtOptions.onHover.props.forEach(function (object, index) {
                   if (object.eventType) {
@@ -661,7 +667,7 @@ angular.module('app')
               if (index === $scope.aoColumns.length || ($(this).find('input').length > 0 && $(this).find('input')[0].type === "checkbox") || $(this).hasClass('icons')) {
                 $(this).html('<input  type="text" name="' + title + '" class="dtSearch' + index + ' hideIt form-control" placeholder="Search ' + title + '" />');
               }
-              else if(title == "sync status" && $state.current.name == "app.masterdata") {
+              else if (title == "sync status" && $state.current.name == "app.masterdata") {
                 $(this).html('<div class="dtSearch form-control search-box"/>');
               }
               else {
@@ -713,47 +719,47 @@ angular.module('app')
                 },
                 {
                   targets: 1,
-                  createdCell:  function (td, cellData, rowData, row, col) {
+                  createdCell: function (td, cellData, rowData, row, col) {
                     var tempStr = $scope.dtOptions.onHover.template;
                     $scope.dtOptions.onHover.props.forEach(function (object, index) {
-                      if (object.name){
-                        if(object.name === 'server'){
-                          if(!rowData.server){
-                            rowData.server="";
+                      if (object.name) {
+                        if (object.name === 'server') {
+                          if (!rowData.server) {
+                            rowData.server = "";
                             //tempStr = tempStr.replace("<button class=' btn-transparent copyUrl' data-toggle='tooltip' data-placement='top' title='Copy URL' ui-jq='tooltip'><img src='../assets/img/copy-paste.png'></button>","<br>");
-                            tempStr=tempStr.replace("<div class='m-b-10'> <span class='pull-left'> Url: </span> <a id='copyUrl' href='//[server]' target='_blank' class='pull-left' style='overflow: hidden;text-overflow: ellipsis;max-width:15em;white-space: nowrap;'>&nbsp[server]</a><button class='btn-transparent copyUrl' data-toggle='tooltip' data-placement='top' title='Copy URL' ui-jq='tooltip'><img src='../assets/img/icon_copy.svg' width='22px'></button> </div>"," ")
+                            tempStr = tempStr.replace("<div class='m-b-10'> <span class='pull-left'> Url: </span> <a id='copyUrl' href='//[server]' target='_blank' class='pull-left' style='overflow: hidden;text-overflow: ellipsis;max-width:15em;white-space: nowrap;'>&nbsp[server]</a><button class='btn-transparent copyUrl' data-toggle='tooltip' data-placement='top' title='Copy URL' ui-jq='tooltip'><img src='../assets/img/icon_copy.svg' width='22px'></button> </div>", " ")
                           }
                           var url = '';
 
                           var urlArray = (rowData.server) ? rowData.server.split(':') : rowData.server;
-                          if(typeof urlArray === 'object' && urlArray.constructor === Array && urlArray.length > 1){
-                            if(urlArray.length>2) {
+                          if (typeof urlArray === 'object' && urlArray.constructor === Array && urlArray.length > 1) {
+                            if (urlArray.length > 2) {
                               urlArray = urlArray.splice(1);
                               urlArray = urlArray.join(':');
                               url = urlArray;
-                            }else{
+                            } else {
                               url = urlArray[1];
                             }
-                          }else{
+                          } else {
                             url = (typeof urlArray === 'object' && urlArray.constructor === Array) ? urlArray[0] : urlArray;
                           }
                           tempStr = tempStr.replace("[" + object.name + "]", url);
                         }
-                        if(object.name != 'server') {
+                        if (object.name != 'server') {
                           tempStr = tempStr.replace("[" + object.name + "]", rowData.userNamePassword);
                         }
-                        if(object.name === 'server') {
+                        if (object.name === 'server') {
                           tempStr = tempStr.replace("[" + object.name + "]", rowData.server);
                         }
                       }
 
                     });
-                    if($scope.dtOptions.onHover.props.length>4){
+                    if ($scope.dtOptions.onHover.props.length > 4) {
                       if ($scope.dtOptions.onHover.isHover) {
                         $(td).attr({
                           "title": $scope.dtOptions.onHover.title + " <span class='bold'>" + rowData.passwordName + "</span>",
                           "data-toggle": "popover",
-                          'data-container':"body",
+                          'data-container': "body",
                           "data-content": tempStr,
                           "data-placement": $scope.dtOptions.onHover["data-placement"],
                           "data-html": $scope.dtOptions.onHover["data-html"],
@@ -766,9 +772,9 @@ angular.module('app')
                     $scope.dtOptions.onHover.props.forEach(function (object, index) {
                       tempStr1 = rowData.ITBRunBookName;
                     });
-                    if($scope.dtOptions.saveStateName == 'Knowledgebase') {
+                    if ($scope.dtOptions.saveStateName == 'Knowledgebase') {
                       if ($scope.dtOptions.onHover.isHover) {
-                        $('<span class="tooltip1" ><span class="tooltiptext1">'+tempStr1+'</span></span>').appendTo(td.childNodes[0]);
+                        $('<span class="tooltip1" ><span class="tooltiptext1">' + tempStr1 + '</span></span>').appendTo(td.childNodes[0]);
                       }
                     }
                   }
@@ -802,9 +808,9 @@ angular.module('app')
                 scrollTotal = iTotal;
                 return ($scope.dtOptions.changeInfoMessage)
                   ? 'Total no of records found: ' + iTotal
-                  :(iTotal == 0)
-                    ?'Showing ' + iTotal + ' to ' + iEnd + ' of ' + iTotal + ' entries'
-                    :'Showing ' + iStart + ' to ' + iEnd + ' of ' + iTotal + ' entries';
+                  : (iTotal == 0)
+                    ? 'Showing ' + iTotal + ' to ' + iEnd + ' of ' + iTotal + ' entries'
+                    : 'Showing ' + iStart + ' to ' + iEnd + ' of ' + iTotal + ' entries';
               },
               "drawCallback": function (settings) {
                 $timeout(function () {
@@ -812,7 +818,6 @@ angular.module('app')
                 }, 2000);
               }
             };
-
 
 
             /************************** Creating Datatable ************************ */
@@ -823,20 +828,23 @@ angular.module('app')
             $scope.scrollMethod();
 
             registerEventListener();
+
             /**************************                   Event listners                  ***************************/
 
             /********* register event for those columns which are not visible by default *********/
-            function columnReorder () {
+            function columnReorder() {
               $("#" + $scope.tableId).on('column-reorder.dt', function (e, settings, details) {
-                setTimeout(function(){
+                setTimeout(function () {
                   saveColumnSettings();
                   registerEventListener();
                 }, 1000);
               });
             }
+
             columnReorder();
             colVisFunc();
-            function visibleColum () {
+
+            function visibleColum() {
               $("#" + $scope.tableId).on('column-visibility.dt', function (e, settings, details) {
                 setTimeout(function () {
                   saveColumnSettings();
@@ -844,6 +852,7 @@ angular.module('app')
                 }, 1000);
               });
             }
+
             visibleColum();
             if (typeof $scope.dtOptions.buttons.name !== "undefined") {
               if ($scope.colvisBid === undefined) {
@@ -868,7 +877,7 @@ angular.module('app')
                   .appendTo('#' + $scope.colvisBid);
                 columnReorder();
                 $("#" + $scope.tableId).on('column-reorder.dt', function (e, settings, details) {
-                  setTimeout(function(){
+                  setTimeout(function () {
                     saveColumnSettings();
                     registerEventListener();
                   }, 1000);
@@ -876,7 +885,7 @@ angular.module('app')
                 if ($scope.dtOptions.fixedColumns.leftColumns === 0 && $scope.dtOptions.fixedColumns.rightColumns === 0) {
                   $(".DTFC_RightWrapper").css("display", "none");
                 }
-                $("#" + $scope.colvisBid).tooltip({title: "Select Columns" , placement: "bottom"});
+                $("#" + $scope.colvisBid).tooltip({title: "Select Columns", placement: "bottom"});
 
 
               }
@@ -982,18 +991,19 @@ angular.module('app')
               if (newA == conter) {
                 $scope.noVisibility = true;
 
-                $('.dataTables_wrapper').css('visibility','hidden');
+                $('.dataTables_wrapper').css('visibility', 'hidden');
 
               }
 
               else {
                 $scope.noVisibility = false;
 
-                $('.dataTables_wrapper').css('visibility','visible');
+                $('.dataTables_wrapper').css('visibility', 'visible');
 
               }
             }
           }
+
           function saveColumnSettings() {
             if ($scope.dtOptions.saveState === true) {
               colVisFunc();

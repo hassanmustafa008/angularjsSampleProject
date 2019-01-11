@@ -2,17 +2,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="scripts/bootstrap-4.2.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="scripts/DataTables/datatables.css">
 </head>
 <body ng-controller="TestCtrl">
-    <div>afdsafadsa</div>
-    <script type="text/javascript" src="scripts/DataTables/jQuery-3.3.1/jquery-3.3.1.js"></script>
-    <script type="text/javascript" src="scripts/DataTables/datatables.js"></script>
-    <script type="text/javascript" src="scripts/angular-1.7.5/angular.js"></script>
-    <script type="text/javascript" src="app/app.js"></script>
-    <!--common-->
-    <script src="app/common/GlobalSvc.js"></script>
-    <!--directives-->
-    <script type="text/javascript" src="app/directives/datatable/dtList.js"></script>
+<div class="col-md-12">
+    <div class="col-md-4">
+        <h4>Custom Directive <b>SHARED</b> Scope (FALSE)</h4>
+        <input type="text" ng-model="shared">
+        <shared-scope-directive></shared-scope-directive>
+    </div>
+    <div class="col-md-4">
+        <h4>Custom Directive <b>INHERITED</b> Scope (TRUE)</h4>
+        <input type="text" ng-model="inherited">
+        <inherited-scope-directive></inherited-scope-directive>
+    </div>
+    <div class="col-md-4">
+        <h4>Custom Directive <b>ISOLATE</b> Scope ({})</h4>
+        <input type="text" ng-model="isolate">
+        <isolate-scope-directive></isolate-scope-directive>
+    </div>
+</div>
+<script type="text/javascript" src="scripts/DataTables/jQuery-3.3.1/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="scripts/bootstrap-4.2.1-dist/js/bootstrap.js"></script>
+<script type="text/javascript" src="scripts/DataTables/datatables.js"></script>
+<script type="text/javascript" src="scripts/angular-1.7.5/angular.js"></script>
+<script type="text/javascript" src="app/app.js"></script>
+<!--common-->
+<script type="text/javascript" src="app/common/globalSvc.js"></script>
+<!--directives-->
+<script type="text/javascript" src="app/directives/datatable/dtList.js"></script>
+<script type="text/javascript" src="app/directives/sharedScopeDirective/sharedScopeDirective.js"></script>
+<script type="text/javascript" src="app/directives/isolateScopeDirective/isolateScopeDirective.js"></script>
+<script type="text/javascript" src="app/directives/inheritedScopeDirective/inheritedScopeDirective.js"></script>
 </body>
 </html>
