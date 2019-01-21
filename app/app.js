@@ -1,12 +1,8 @@
 (function () {
   "use strict";
-  angular.module("app", [])
-    .config([function () {
+  angular.module("custom.Directives", []);
+  angular.module("app", ["ngRoute", "custom.Directives"]);
 
-    }])
-    .run([function () {
-
-    }]);
   angular.module("app").controller("TestCtrl", ["$scope", "GlobalSvc", function ($scope, globalSvc) {
     debugger;
     // globalSvc.Get("list").then(function () {
