@@ -5,10 +5,10 @@ angular.module("app").directive("inheritedScopeDirective", ["$log", function ($l
     restrict: 'E',
     scope: true,
     link: function () {
-      console.log();
+      console.log("Inherited");
     },
-    controller:function ($scope) {
-      debugger;
+    controller: function ($scope) {
+      console.log($scope);
     }
   }
 }]);

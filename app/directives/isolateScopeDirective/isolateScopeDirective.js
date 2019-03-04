@@ -5,10 +5,10 @@ angular.module("app").directive("isolateScopeDirective", ["$log", function ($log
     restrict: 'E',
     scope: {},
     link: function () {
-      console.log();
+      console.log("Isolate");
     },
-    controller:function ($scope) {
-      debugger;
+    controller: function ($scope) {
+      console.log($scope);
     }
   }
 }]);

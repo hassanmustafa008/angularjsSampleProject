@@ -4,22 +4,58 @@
     <title>Title</title>
     <link rel="stylesheet" href="scripts/bootstrap-4.2.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="scripts/DataTables/datatables.css">
+    <style>
+        .row {
+            padding: 0;
+            margin: 0;
+        }
+
+        .col {
+            background-color: #6c757d;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        h4 {
+            color: aliceblue;
+        }
+
+        h6 {
+            color: #9fcdff;
+        }
+    </style>
 </head>
 <body ng-controller="TestCtrl">
-<div class="col-md-12">
-    <div class="col-md-4">
-        <h4>Custom Directive <b>SHARED</b> Scope (FALSE)</h4>
-        <input type="text" ng-model="shared">
+<div class="row">
+    <div class="col">
+        <div>
+            <h4><b>SHARED</b> Scope: false</h4>
+        </div>
+        <h6>Parent -> Child (True)</h6>
+        <h6>Child -> Parent (True)</h6>
+        <input type="text" class="form-control" ng-model="shared" placeholder="Shared Parent">
+        <br>
         <shared-scope-directive></shared-scope-directive>
     </div>
-    <div class="col-md-4">
-        <h4>Custom Directive <b>INHERITED</b> Scope (TRUE)</h4>
-        <input type="text" ng-model="inherited">
+    <div class="col">
+        <div>
+            <h4><b>INHERITED</b> Scope: true</h4>
+        </div>
+        <h6>Parent -> Child (True)</h6>
+        <h6>Child -> Parent (False)</h6>
+        <input type="text" class="form-control" ng-model="inherited" placeholder="Inherited Parent">
+        <br>
         <inherited-scope-directive></inherited-scope-directive>
     </div>
-    <div class="col-md-4">
-        <h4>Custom Directive <b>ISOLATE</b> Scope ({})</h4>
-        <input type="text" ng-model="isolate">
+    <div class="col">
+        <div>
+            <h4><b>ISOLATE</b> Scope: {}</h4>
+        </div>
+        <h6>Parent -> Child (False)</h6>
+        <h6> Child -> Parent (False)</h6>
+        <input type="text" class="form-control" ng-model="isolate" placeholder="Isolate Parent">
+        <br>
         <isolate-scope-directive></isolate-scope-directive>
     </div>
 </div>

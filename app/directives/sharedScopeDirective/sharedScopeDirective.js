@@ -4,10 +4,11 @@ angular.module("app").directive("sharedScopeDirective", ["$log", function ($log)
     templateUrl: "app/directives/sharedScopeDirective/sharedScopeDirective.html",
     restrict: 'E',
     link: function () {
-      console.log();
+      console.log("Shared");
     },
-    controller:function ($scope) {
-      debugger;
+    controller: function ($scope) {
+      console.log($scope);
+
     }
   }
 }]);
