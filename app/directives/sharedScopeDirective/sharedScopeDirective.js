@@ -8,7 +8,6 @@ angular.module("app").directive("sharedScopeDirective", ["$log", function ($log)
     },
     controller: function ($scope) {
       console.log($scope);
-
     }
   }
 }]);

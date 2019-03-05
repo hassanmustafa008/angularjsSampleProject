@@ -1,4 +1,4 @@
-// (function () {
-//   "use strict";
-//   angular.module("custom.Directives", []);
-// })();
+(function () {
+  "use strict";
+  angular.module("custom.Directives", []);
+})();
