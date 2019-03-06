@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="col">
+        <div>
+            <h4><b>SHARED</b> Scope: false</h4>
+        </div>
+        <h6>Parent -> Child (True)</h6>
+        <h6>Child -> Parent (True)</h6>
+        <input type="text" class="form-control" ng-model="shared" placeholder="Shared Parent">
+        <br>
+        <shared-scope-directive></shared-scope-directive>
+    </div>
+    <div class="col">
+        <div>
+            <h4><b>INHERITED</b> Scope: true</h4>
+        </div>
+        <h6>Parent -> Child (True)</h6>
+        <h6>Child -> Parent (False)</h6>
+        <input type="text" class="form-control" ng-model="inherited" placeholder="Inherited Parent">
+        <br>
+        <inherited-scope-directive></inherited-scope-directive>
+    </div>
+    <div class="col">
+        <div>
+            <h4><b>ISOLATE</b> Scope: {}</h4>
+        </div>
+        <h6>Parent -> Child (False)</h6>
+        <h6> Child -> Parent (False)</h6>
+        <input type="text" class="form-control" ng-model="isolate" placeholder="Isolate Parent">
+        <br>
+        <isolate-scope-directive></isolate-scope-directive>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div>
+            <h4><b>ISOLATE</b> @ Local Scope Property</h4>
+        </div>
+        <h6>Parent -> Child (False)</h6>
+        <h6> Child -> Parent (False)</h6>
+        <input type="text" class="form-control" ng-model="sharedStr" placeholder="Isolate Parent">
+        <br>
+        <isolate-scope-directive-str shared-str="{{sharedStr}}"></isolate-scope-directive-str>
+    </div>
+    <div class="col">
+        <div>
+            <h4><b>ISOLATE</b> = Local Scope Property</h4>
+        </div>
+        <h6>Parent -> Child (False)</h6>
+        <h6> Child -> Parent (False)</h6>
+        <input type="text" class="form-control" ng-model="sharedObj" placeholder="Isolate Parent">
+        <br>
+        <isolate-scope-directive-obj shared-obj="sharedObj"></isolate-scope-directive-obj>
+    </div>
+    <div class="col">
+        <div>
+            <h4><b>ISOLATE</b> & Local Scope Property</h4>
+        </div>
+        <h6>Parent -> Child (False)</h6>
+        <h6> Child -> Parent (False)</h6>
+        <button class="btn btn-light" ng-click="shareFun()">I am from controller</button>
+        <br>
+        <isolate-scope-directive-fun shared-fun="shareFun(directive)"></isolate-scope-directive-fun>
+    </div>
+</div>

@@ -1,10 +1,21 @@
 (function () {
   "use strict";
-  angular.module("app", ["ngRoute", "custom.Directives"]);
+  angular.module("app", ["ngRoute", "directives", "components"]);
 
-  angular.module("app").config(function () {
-
-  }).controller("TestCtrl", ["$scope", "GlobalSvc", function ($scope, globalSvc) {
+  angular.module("app").config(function ($routeProvider) {
+    $routeProvider
+      .when("/directives", {
+        templateUrl: "app/modules/directivesModules/directivesScope/customDirectives.html",
+        controller: "directivesCtrl"
+      })
+      .when("/components", {
+        templateUrl: "app/modules/componentsModule/components/components.html",
+        controller: "componentsCtrl"
+      })
+      .otherwise({
+        redirectTo: '/directives'
+      });
+  }).controller("appCtrl", ["$scope", "GlobalSvc", function ($scope, globalSvc) {
     // $scope.shared = "test1";
     // $scope.isolate = "test1";
     // $scope.inherited = "test1";

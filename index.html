@@ -26,80 +26,33 @@
         }
     </style>
 </head>
-<body ng-controller="TestCtrl">
-<div class="row">
-    <div class="col">
-        <div>
-            <h4><b>SHARED</b> Scope: false</h4>
-        </div>
-        <h6>Parent -> Child (True)</h6>
-        <h6>Child -> Parent (True)</h6>
-        <input type="text" class="form-control" ng-model="shared" placeholder="Shared Parent">
-        <br>
-        <shared-scope-directive></shared-scope-directive>
-    </div>
-    <div class="col">
-        <div>
-            <h4><b>INHERITED</b> Scope: true</h4>
-        </div>
-        <h6>Parent -> Child (True)</h6>
-        <h6>Child -> Parent (False)</h6>
-        <input type="text" class="form-control" ng-model="inherited" placeholder="Inherited Parent">
-        <br>
-        <inherited-scope-directive></inherited-scope-directive>
-    </div>
-    <div class="col">
-        <div>
-            <h4><b>ISOLATE</b> Scope: {}</h4>
-        </div>
-        <h6>Parent -> Child (False)</h6>
-        <h6> Child -> Parent (False)</h6>
-        <input type="text" class="form-control" ng-model="isolate" placeholder="Isolate Parent">
-        <br>
-        <isolate-scope-directive></isolate-scope-directive>
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        <div>
-            <h4><b>ISOLATE</b> @ Local Scope Property</h4>
-        </div>
-        <h6>Parent -> Child (False)</h6>
-        <h6> Child -> Parent (False)</h6>
-        <input type="text" class="form-control" ng-model="sharedStr" placeholder="Isolate Parent">
-        <br>
-        <isolate-scope-directive-str shared-str="{{sharedStr}}"></isolate-scope-directive-str>
-    </div>
-    <div class="col">
-        <div>
-            <h4><b>ISOLATE</b> = Local Scope Property</h4>
-        </div>
-        <h6>Parent -> Child (False)</h6>
-        <h6> Child -> Parent (False)</h6>
-        <input type="text" class="form-control" ng-model="sharedObj" placeholder="Isolate Parent">
-        <br>
-        <isolate-scope-directive-obj shared-obj="sharedObj"></isolate-scope-directive-obj>
-    </div>
-    <div class="col">
-        <div>
-            <h4><b>ISOLATE</b> & Local Scope Property</h4>
-        </div>
-        <h6>Parent -> Child (False)</h6>
-        <h6> Child -> Parent (False)</h6>
-        <button class="btn btn-light" ng-click="shareFun()">I am from controller</button>
-        <br>
-        <isolate-scope-directive-fun shared-fun="shareFun(directive)"></isolate-scope-directive-fun>
-    </div>
-</div>
+<body ng-controller="appCtrl">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+    <a class="navbar-brand" href="#/directives">Home</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="#/directives">Directives</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#/components">Components</a>
+        </li>
+    </ul>
+</nav>
+<ng-view></ng-view>
+<!--scripts-->
 <script type="text/javascript" src="scripts/DataTables/jQuery-3.3.1/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="scripts/bootstrap-4.2.1-dist/js/bootstrap.js"></script>
 <script type="text/javascript" src="scripts/DataTables/datatables.js"></script>
 <script type="text/javascript" src="scripts/angular-1.7.5/angular.js"></script>
 <script type="text/javascript" src="scripts/angular-1.7.5/angular-route.js"></script>
 <!--modules-->
-<script type="text/javascript" src="app/modules/customDirectives/customDirectives.js"></script>
+<script type="text/javascript" src="app/modules/directivesModules/directivesModule.js"></script>
+<script type="text/javascript" src="app/modules/componentsModule/componentsModule.js"></script>
 <!--app-->
 <script type="text/javascript" src="app/app.js"></script>
+<!--controllers-->
+<script type="text/javascript" src="app/modules/directivesModules/directivesScope/customDirectives.js"></script>
+<script type="text/javascript" src="app/modules/componentsModule/components/components.js"></script>
 <!--common-->
 <script type="text/javascript" src="app/common/globalSvc.js"></script>
 <!--directives-->
